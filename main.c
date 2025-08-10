@@ -2,7 +2,7 @@
 #include "struct_values.h"
 #include "header/print_grid.h"
 #include "header/parse.h"
-#include "header/check.h"
+#include "header/solve.h"
 
 
 int	main()
