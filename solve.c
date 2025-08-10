@@ -1,26 +1,26 @@
 #include "header/solve.h"
 
-bool is_valid_line(int **board, int line, int col)
+bool is_valid_line(struct cell **board, int line, int col)
 {
 		for (int x = 0; x < 9; x++)
 		{
-				if (board[line][x] == board[line][col] && x != col)
+				if (board[line][x].value == board[line][col].value && x != col)
 						return (false);
 		}
 		return (true);
 }
 
-bool is_valid_col(int **board, int line, int col)
+bool is_valid_col(struct cell **board, int line, int col)
 {
 		for (int y = 0; y < 9; y++)
 		{
-			if (board[y][col] == board[line][col] && y != line)
-					return (false);
+			if (board[y][col].value == board[line][col].value && y != line)
+				return (false);
 		}
 	return (true);
 }
 
-bool is_valid_square(int **board, int line, int col)
+bool is_valid_square(struct cell **board, int line, int col)
 {
 		int x_start;
 		int y_start;
@@ -32,7 +32,7 @@ bool is_valid_square(int **board, int line, int col)
 		{
 				for (int x = x_start; x < x_start + 3; x++)
 				{
-						if (board[y][x] == board[line][col] && y != line && x != col)
+						if (board[y][x].value == board[line][col].value && y != line && x != col)
 								return (false);
 				}
 		}
@@ -40,24 +40,34 @@ bool is_valid_square(int **board, int line, int col)
 }
 
 
-void solve_grid(int **board, int line, int col)
+void solve_grid(struct cell **board, int line, int col)
 {
-		if (line == 9 && col == 0)
+		if (line == 9)
 		{
 				print_grid(board);
 				return;
 		}
-		if (board[line][col].defined == false)
+		if (board[line][col].defined == true)
 		{
-				board[line][col] = 1;
-
-				while (board[line][col] <=  9)
+				if (col == 8)
+						solve_grid(board, line + 1, 0);
+				else
+						solve_grid(board, line, col + 1);	
+		}
+		else
+		{
+				board[line][col].value = 1;
+				
+				while (board[line][col].value <=  9)
 				{
-						if (is_valid_line(board, line, col) && is_valid_col(board, line, col) && is_valid_square(board, line, col) && col == 8)
+						if (is_valid_line(board, line, col) && is_valid_col(board, line, col) && is_valid_square(board, line, col))
+						{	
+								if (col == 8)
 										solve_grid(board, line + 1, 0);
-						else if (is_valid_line(board, line, col) && is_valid_col(board, line, col) && is_valid_square(board, line, col))
-								solve_grid(board, line, col + 1);	
-						board[line][col]++;
+								else
+										solve_grid(board, line, col + 1);	
+						}
+						board[line][col].value++;
 				}
 		}
 }

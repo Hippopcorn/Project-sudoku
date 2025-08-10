@@ -35,30 +35,35 @@ char *read_file()
 	return (buf);
 }
 
-int **convert_grid(char *buf)
+struct cell **parse_grid(char *buf)
 {
-	int		**grid;
+	struct cell		**tab_cell;
 	int		i;
 
 	i = 0;
 
-	grid = malloc(9 * sizeof(int*));
+	tab_cell = malloc(9 * sizeof(struct cell*));
 
 	for (int line = 0; line < 9; line++)
 	{
-			grid[line] = malloc(9 * sizeof(int));
+			tab_cell[line] = malloc(9 * sizeof(struct cell));
 			for (int col = 0; col < 9; col++)
 			{
 					while (buf[i] == '\n' || buf[i] == '\r')
 							i++;
-					grid[line][col] = buf[i++] - '0';
+					
+					tab_cell[line][col].value = buf[i++] - '0';
+					if (tab_cell[line][col].value == 0)
+							tab_cell[line][col].defined = false;
+					else 
+							tab_cell[line][col].defined = true;
 			}
 	}
-	return (grid);
+	return (tab_cell);
 }
 				
 					
-
+/*
 struct cell *parse_grid(int **grid)
 {
 		struct	cell *tab_cell;
@@ -83,4 +88,4 @@ struct cell *parse_grid(int **grid)
 				}
 		}
 		return (tab_cell);
-}
+}*/

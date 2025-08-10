@@ -1,7 +1,7 @@
 
 #include "header/print_grid.h"
 
-void	print_grid(int **grid)
+void	print_grid(struct cell **grid)
 {
 		for (int i = 1; i < 20; i++)
 		{			
@@ -22,7 +22,7 @@ void	print_grid(int **grid)
 				for (int col = 0; col < 9; col++)
 				{
 						ft_putchar('|');
-						ft_putchar(grid[line][col] + '0');
+						ft_putchar(grid[line][col].value + '0');
 				}
 				ft_putchar('|');
 				ft_putchar('\n');

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "struct_values.h"
+#include "header/struct_values.h"
 #include "header/print_grid.h"
 #include "header/parse.h"
 #include "header/solve.h"
@@ -8,15 +8,11 @@
 int	main()
 {
 		char *sudoku;
-		int **grid;
-		struct cell *parsing_cells;   
-		int i;
+		struct cell **parsing_cells;   
 
-		i = 0;
 		sudoku = read_file();
-		grid = convert_grid(sudoku);
-		print_grid(grid);
-		parsing_cells = parse_grid(grid);
+		parsing_cells = parse_grid(sudoku);
+		solve_grid(parsing_cells, 0, 0);
 
 		return (0);
 }
