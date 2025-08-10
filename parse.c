@@ -1,8 +1,4 @@
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "header/parse.h"
 
 char *read_file()
 {
@@ -10,7 +6,9 @@ char *read_file()
 	int 	fd;
 	char 	*buf;
 	int 	nb_read;
+	int		i;
 
+	i = 0;
 	nb_read = -1;
 	size_file = 98;
 	buf = malloc(sizeof(char) * (size_file + 1));
@@ -37,69 +35,52 @@ char *read_file()
 	return (buf);
 }
 
-char *get_line(char *buf, int i)
+int **convert_grid(char *buf)
 {
-		int i_line;
-		char *line;
+	int		**grid;
+	int		i;
 
-		i_line = 0;
-		while (buf[i] != '\n')
-		{
-				line[i_line] = buf[i];
-				i++;
-				i_line++;
-		}
-		line[i_line] = '\0';
-		return (line);
+	i = 0;
+
+	grid = malloc(9 * sizeof(int*));
+
+	for (int line = 0; line < 9; line++)
+	{
+			grid[line] = malloc(9 * sizeof(int));
+			for (int col = 0; col < 9; col++)
+			{
+					while (buf[i] == '\n' || buf[i] == '\r')
+							i++;
+					grid[line][col] = buf[i++] - '0';
+			}
+	}
+	return (grid);
 }
+				
+					
 
-char **parse_file(char *buf)
+struct cell *parse_grid(int **grid)
 {
-		char **tab_lines;
+		struct	cell *tab_cell;
 		int i;
-		int i_tab;
 
 		i = 0;
-		i_tab = 0;
-		tab_lines = malloc(sizeof(char) * (98 + 1));
-		while (buf[i] != '\0')
+		tab_cell = malloc(81 * sizeof(struct cell));
+		if (!tab_cell)
+				return (NULL);
+		for (int line = 0; line < 9; line++)
 		{
-				if (i == 0 || buf[i - 1] == '\n')
+				for (int col = 0; col < 9; col++)
 				{
-						tab_lines[i_tab] = get_line(buf, i);
-						printf("%s\n", tab_lines[i_tab]);
-						i_tab++;
+						tab_cell[i].value = grid[line][col];
+						tab_cell[i].line = line;
+						tab_cell[i].col = col;
+						if (grid[line][col] == 0)
+								tab_cell[i].defined = false;
+						else
+								tab_cell[i].defined = true;
+						i++;
 				}
-				i++;
 		}
-		return (tab_lines);
-}	
-
-//	faire un tableau de tableau de char pour stocker toutes les lignes : 
-//	pour malloc : malloc un tableau de char* puis faire une boucle for pour malloc 10 caracteres par ligne :)
-//	faire un tableau de int a la place de char et pas de \0;
-
-int	main()
-{
-		char **tab;
-		int i;
-
-		i = 0;
-		tab = parse_file(read_file());
-		/*
-		while (i < 8)
-		{
-				printf("%s\n", tab[i]);
-				i++;
-		}*/
-
-		return (0);
+		return (tab_cell);
 }
-
-
-
-
-			
-
-
-
