@@ -1,5 +1,5 @@
 
-#include "header/print_grid.h"
+#include "../include/print_grid.h"
 
 void	print_grid(struct cell **grid)
 {

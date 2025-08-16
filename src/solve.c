@@ -1,4 +1,4 @@
-#include "header/solve.h"
+#include "../include/solve.h"
 
 bool is_valid_line(struct cell **board, int line, int col)
 {
